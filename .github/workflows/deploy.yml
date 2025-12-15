@@ -52,6 +52,8 @@ jobs:
       - name: Deploy to WebServer
         run: |
           rsync -avz --delete --chmod=D755,F644 \
+            --exclude='.user.ini' \
+            --exclude='.htaccess' \
             -e "ssh -p ${{ secrets.SERVER_PORT || 22 }}" \
             docs/.vitepress/dist/ \
             ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }}:${{ secrets.SERVER_PATH }}/

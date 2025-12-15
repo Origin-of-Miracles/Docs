@@ -44,12 +44,17 @@ jobs:
           mkdir -p ~/.ssh
           ssh-keyscan -H ${{ secrets.SERVER_HOST }} >> ~/.ssh/known_hosts
 
+      - name: Create remote directory
+        run: |
+          ssh -p ${{ secrets.SERVER_PORT || 22 }} ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} \
+            "mkdir -p ${{ secrets.SERVER_PATH }}"
+
       - name: Deploy to WebServer
         run: |
-          rsync -avz --delete \
+          rsync -avz --delete --chmod=D755,F644 \
             -e "ssh -p ${{ secrets.SERVER_PORT || 22 }}" \
             docs/.vitepress/dist/ \
-            ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }}:${{ secrets.SERVER_PATH }}
+            ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }}:${{ secrets.SERVER_PATH }}/
 
       - name: Deployment completed
         run: echo "✅ Deployment to ${{ secrets.SERVER_HOST }} completed successfully!"

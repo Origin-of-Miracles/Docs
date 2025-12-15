@@ -60,3 +60,4 @@ coverage/
 *.temp
 .temp/
 .cache/
+docs/.vitepress/cache

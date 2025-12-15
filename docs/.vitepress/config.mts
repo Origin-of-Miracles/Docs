@@ -6,7 +6,7 @@ export default defineConfig({
   description: "Community Documentation - Where all miracles begin",
   
   lang: 'zh-CN',
-  cleanUrls: true,
+  cleanUrls: false,
   
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config

@@ -9,17 +9,26 @@ Origin of Miracles (以下简称 "本项目") 是一个基于《蔚蓝档案》(
 
 使用本项目（包括但不限于客户端模组、服务端整合包、Webview 组件）即代表您同意本协议的所有条款。
 
-## 2. Commercial Usage Policy | 商业使用政策
+## 2. License & Commercial Usage | 许可与商业使用
 
-本项目采用 **CC BY-NC-SA 4.0** (署名-非商业性使用-相同方式共享) 许可协议。
+本项目采用分层许可模式 (Multi-License Strategy)，不同模块遵循不同的开源协议：
 
-### 2.1 严禁商业营利 (Strictly Non-Commercial)
+### 2.1 License Breakdown | 协议细则
+
+| Level | Component | License | Description |
+| :--- | :--- | :--- | :--- |
+| **L1** | **Miracle-Bridge** | **GNU AGPLv3** | 浏览器内核管理与底层通信。修改此部分代码必须开源。 |
+| **L2** | **Miracle-Core** | **GNU AGPLv3** | 核心游戏逻辑与网络同步。修改此部分代码必须开源。 |
+| **L3** | **Shittim-OS** | **CC BY-NC-SA 4.0** | 前端 UI、美术素材与表现层资源。严禁商用。 |
+| **L4** | **Product (Jar)** | **Custom EULA** | 最终分发产物。受本协议所有条款约束。 |
+
+### 2.2 Strict Non-Commercial Policy | 严禁商业营利
 您 **不得** 将本项目用于任何形式的商业营利目的。包括但不限于：
 -   **付费入服**：要求玩家付费才能进入服务器。
 -   **Pay-to-Win (P2W)**：销售任何影响游戏平衡的道具、货币、权限或数值（如：出售强力枪械、经验值、飞行权限等）。
 -   **付费解锁内容**：将本项目的核心玩法、地图区域或剧情内容锁定在付费墙后。
 
-### 2.2 允许的维持性运营 (Permitted Sustainability)
+### 2.3 Permitted Sustainability | 允许的维持性运营
 我们理解服务器运营需要成本（服务器租赁、带宽费用等）。因此，以下行为在 **非营利 (Non-Profit)** 前提下是被允许的：
 -   **无偿捐赠**：接受玩家的自愿捐赠，但捐赠不得作为获取游戏内优势的条件。
 -   **装饰性回馈**：给予捐赠者纯装饰性的回馈（如：聊天称号、大厅特效、非战斗类服装），前提是这些回馈 **绝对不影响** 战斗数值或游戏进程。

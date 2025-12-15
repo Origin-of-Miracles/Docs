@@ -46,15 +46,57 @@
 
 ## 2. Technical Architecture | 技术架构
 
-本项目采用 **前后端分离 (Decoupled Architecture)** 的设计模式，将游戏逻辑（Java）与界面表现（React/TS）完全剥离，确保系统的灵活性与可维护性。
+本项目采用 **分层架构 (Layered Architecture)** 设计，明确各模块职责，确保系统的灵活性与可维护性。
 
-### 2.1 Component Topology | 核心组件拓扑
+### 2.1 Architecture Levels | 架构分层
 
-| Component | Codename | Tech Stack | Responsibility |
-| :--- | :--- | :--- | :--- |
-| **Miracle Bridge** | `Client` | **Java (Forge 1.20.1)** | **[容器层 / 底座]** <br> 1. 负责加载 Chromium 内核 (MCEF)。<br> 2. 监听 MC 游戏事件 (按键、击杀、交互)。<br> 3. 提供 JS <-> Java 的双向原生通信管道 (Native Bridge)。 |
-| **Shittim OS** | `Webview` | **React + ShadcnUI** | **[表现层 / 界面]** <br> 1. 运行于游戏内浏览器的单页应用 (SPA)。<br> 2. 负责渲染 MomoTalk、学生档案、抽卡动画。<br> 3. 处理复杂的 UI 交互逻辑与状态管理。 |
-| **Server Pack** | `World` | **TacZ + Scripts** | **[内容层 / 玩法]** <br> 1. 枪械数据平衡、总力战 Boss 机制 (TBD/待定)。<br> 2. 经济系统数值策划。<br> 3. 任务脚本与地图编排。 |
+#### Level 1: Miracle-Bridge (连接器)
+
+**定位：** 它是“操作系统”的内核。它不知道什么是“蔚蓝档案”，它只知道如何显示网页。
+
+**职责：**
+
+*   **MCEF Lifecycle:** 负责初始化 Chromium 进程，处理浏览器崩溃重启。
+*   **Input Hijacking (关键):** 监听键盘 `M` 键或其他快捷键，通过 MouseHelper 和 KeyMapping 释放 Minecraft 的鼠标锁定，将输入流无缝切换给浏览器（这是最难处理的部分，作为独立模块维护非常合理）。
+*   **Scheme Handler:** 拦截 `http://miracle.local/` 请求，将其重定向到 Mod 内部的资源文件（解决跨域问题）。
+*   **JS Injection:** 提供 `injectJS(String script)` 方法供 L2 调用。
+
+**AGPL 效力：** 如果有人想优化这个浏览器的渲染效率，他修改后必须开源。
+
+#### Level 2: Miracle-Core (核心业务)
+
+**定位：** 它是“蔚蓝档案”的游戏逻辑。它是连接 Java 世界和 React 世界的翻译官。
+
+**职责：**
+
+*   **Bridge Binding:** 在 Mod 初始化时，实例化 L1 的浏览器对象，并注册具体的 JSQueryHandler (如 `startGacha`, `buyItem`)。
+*   **Game Logic:**
+    *   **抽卡:** 计算伪随机数，扣除青辉石（服务端数据），发放物品。
+    *   **枪械:** 监听 TacZ 事件，处理伤害计算。
+*   **Security (EULA Check):**
+    *   在 `FMLServerStartingEvent` 中检测当前服务器是否有商业插件特征。
+    *   **资源解密:** 读取 L3 的加密资源包，在内存中解密流，传给 L1 进行渲染（防止直接提取素材）。
+
+**AGPL 效力：** 包含了具体的游戏玩法逻辑。如果有人想改抽卡概率或者去掉 EULA 检查，他必须公开修改后的代码。
+
+#### Level 3: Shittim-OS (表现/资源)
+
+**定位：** 它是玩家看到的“脸”。所有的视觉魅力都在这里。
+
+**职责：**
+
+*   **Router:** 管理 SPA (单页应用) 的路由，如 `/home`, `/gacha`, `/momotalk`。
+*   **State Management:** 使用 Zustand/Redux 接收 L2 发来的 JSON 数据（如 `{"pyroxene": 1200}`），并更新 UI。
+*   **Visuals:** 包含所有的图片 (PNG/WebP)、Live2D 模型、CSS 样式。
+
+#### Level 4: Product (Jar) (最终成品)
+
+**定位：** 分发层。
+
+**职责：**
+
+*   **Gradle 构建产物:** 将上述三者打包在一起的最终 Mod 文件。
+*   **License:** 包含以上所有协议限制 (Custom EULA)。
 
 ### 2.2 Data Flow | 通信数据流
 

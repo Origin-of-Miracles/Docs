@@ -10,14 +10,14 @@ hero:
     alt: Origin of Miracles
   actions:
     - theme: brand
-      text: 阅读社区宣言
+      text: 我们的憧憬
+      link: /aspirations
+    - theme: alt
+      text: 社区宣言
       link: /manifesto
     - theme: alt
-      text: EULA 协议
-      link: /eula
-    - theme: alt
       text: GitHub
-      link: https://github.com/Origin-of-Miracles
+      link: https://bluearchive.shinoyuki.cn
 ---
 
 ## 💠 关于我们

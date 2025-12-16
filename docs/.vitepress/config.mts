@@ -16,18 +16,31 @@ export default defineConfig({
       { text: '首页', link: '/' },
       { text: '社区宣言', link: '/manifesto' },
       { text: 'EULA', link: '/eula' },
+      { text: '开发文档', link: '/dev/' },
       { text: 'GitHub', link: 'https://github.com/Origin-of-Miracles' }
     ],
 
-    sidebar: [
-      {
-        text: '项目文档',
-        items: [
-          { text: '社区宣言', link: '/manifesto' },
-          { text: 'EULA 协议', link: '/eula' }
-        ]
-      }
-    ],
+    sidebar: {
+      '/': [
+        {
+          text: '项目文档',
+          items: [
+            { text: '社区宣言', link: '/manifesto' },
+            { text: 'EULA 协议', link: '/eula' },
+            { text: '我们的憧憬', link: '/aspirations' }
+          ]
+        }
+      ],
+      '/dev/': [
+        {
+          text: '开发文档',
+          items: [
+            { text: '概览', link: '/dev/' },
+            { text: 'Miracle Bridge', link: '/dev/miracle_bridge_dev_guide' }
+          ]
+        }
+      ]
+    },
 
     socialLinks: [
       { icon: 'github', link: 'https://github.com/Origin-of-Miracles' }

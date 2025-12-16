@@ -280,7 +280,156 @@ public interface IEntityDriver {
 }
 ```
 
-## 5. 参考资源 (References)
+## 5. YSM (Yes Steve Model) 兼容层
+
+### 5.1 概述
+
+为实现"活着的学生"，Miracle Bridge 需要与 [Yes Steve Model](https://ysm.cfpa.team/) 模组深度集成。YSM 允许使用基岩版模型格式自定义玩家模型和动画。
+
+### 5.2 平台支持限制
+
+> ⚠️ **重要**: YSM 2.x 核心使用 C++ 编写，**不支持 macOS**！
+
+| 平台 | 支持状态 |
+| :--- | :--- |
+| Windows 10/11 (x64, ARM64) | ✅ |
+| Linux glibc 2.31+ (x64, ARM64) | ✅ |
+| macOS | ❌ **不支持** |
+
+### 5.3 YSM 集成方式
+
+YSM **没有公开的 Java API**，但可通过以下方式集成：
+
+#### 5.3.1 指令接口
+
+```java
+public class YSMCompat {
+    
+    private static final boolean YSM_LOADED = ModList.get().isLoaded("ysm");
+    
+    /** 播放指定动画 */
+    public static void playAnimation(ServerPlayer player, String animationName) {
+        if (!YSM_LOADED) return;
+        executeCommand(player, "ysm play " + player.getName().getString() + " " + animationName);
+    }
+    
+    /** 停止强制播放的动画 */
+    public static void stopAnimation(ServerPlayer player) {
+        if (!YSM_LOADED) return;
+        executeCommand(player, "ysm play " + player.getName().getString() + " stop");
+    }
+    
+    /** 设置模型 */
+    public static void setModel(ServerPlayer player, String modelId, String textureId) {
+        if (!YSM_LOADED) return;
+        executeCommand(player, "ysm model set " + player.getName().getString() 
+            + " " + modelId + " " + textureId + " true");
+    }
+    
+    /** 执行 Molang 表达式（可用于修改变量） */
+    public static void executeMolang(ServerPlayer player, String expression) {
+        if (!YSM_LOADED) return;
+        executeCommand(player, "ysm molang execute " + player.getName().getString() 
+            + " " + expression);
+    }
+    
+    private static void executeCommand(ServerPlayer player, String command) {
+        player.getServer().getCommands().performPrefixedCommand(
+            player.createCommandSourceStack().withPermission(4),
+            command
+        );
+    }
+}
+```
+
+#### 5.3.2 常用 YSM 指令
+
+| 指令 | 用途 |
+| :--- | :--- |
+| `/ysm model set <player> <model_id> <texture_id> [ignore_auth]` | 设置玩家模型 |
+| `/ysm play <player> <animation_name>` | 强制播放动画 |
+| `/ysm play <player> stop` | 停止强制播放 |
+| `/ysm molang execute <player> <expr>` | 执行 Molang 表达式 |
+| `/ysm model reload` | 重载所有模型 |
+
+#### 5.3.3 模型包制作要点
+
+为"学生"角色制作 YSM 模型包时需注意：
+
+1. **配置文件**: 使用 `ysm.json` 声明模型、动画、贴图路径
+2. **动画类型**:
+   - `main`: 主动画（idle, walk, run, jump 等）
+   - `extra`: 轮盘动画（表情、动作）
+   - `arm`: 手臂动画
+   - `tac`: TACZ 枪械兼容
+   - `tlm`: 女仆模组兼容
+
+```jsonc
+// ysm.json 示例结构
+{
+  "spec": 2,
+  "metadata": { "name": "爱丽丝" },
+  "properties": {
+    "height_scale": 0.7,
+    "extra_animation": {
+      "wave": "挥手",
+      "happy": "开心",
+      "sad": "难过"
+    }
+  },
+  "files": {
+    "player": {
+      "model": { "main": "models/main.json", "arm": "models/arm.json" },
+      "animation": {
+        "main": "animations/main.animation.json",
+        "extra": "animations/extra.animation.json"
+      },
+      "texture": ["textures/default.png"]
+    }
+  }
+}
+```
+
+### 5.4 IEntityDriver 与 YSM 的映射
+
+```java
+public class YSMEntityDriver implements IEntityDriver {
+    
+    private final ServerPlayer entity;
+    
+    @Override
+    public void playAnimation(String animationId) {
+        // 映射到 YSM 的 extra 动画
+        YSMCompat.playAnimation(entity, animationId);
+    }
+    
+    @Override
+    public void setExpression(String expressionId) {
+        // 通过 Molang 变量控制表情
+        YSMCompat.executeMolang(entity, "v.expression='" + expressionId + "'");
+    }
+    
+    @Override
+    public void navigateTo(BlockPos target) {
+        // 寻路逻辑（非 YSM 功能，需自行实现）
+    }
+    
+    @Override
+    public void halt() {
+        YSMCompat.stopAnimation(entity);
+    }
+}
+```
+
+### 5.5 已知限制
+
+| 限制 | 说明 | 变通方案 |
+| :--- | :--- | :--- |
+| 无实时骨骼控制 | YSM 不暴露骨骼 API | 预制多套动画，运行时切换 |
+| NPC 支持有限 | 主要面向玩家实体 | 研究 Touhou Little Maid 兼容方式 |
+| macOS 不可用 | C++ native 依赖 | 文档明确告知用户 |
+
+## 6. 参考资源 (References)
 
 - **MCEF GitHub**: https://github.com/CinemaMod/mcef/tree/1.20.1
 - **MCEF Example Mod**: https://github.com/CinemaMod/mcef-fabric-example-mod

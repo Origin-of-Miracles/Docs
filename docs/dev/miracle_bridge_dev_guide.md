@@ -109,6 +109,7 @@ dependencies {
 - **注释**:
     - **Javadoc**: 所有 `public` 接口和核心逻辑类必须包含 Javadoc，说明其用途、参数和返回值。
     - **TODO**: 使用 `// TODO: [User] Description` 标记未完成功能。
+    - 以上注释均使用中文编写，后续可根据需要添加英文注释。
 
 ### 3.3 架构设计原则
 - **模块化 (Modularity)**:

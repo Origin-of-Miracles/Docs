@@ -16,6 +16,12 @@ layout: doc
 | :--- | :--- | :--- |
 | [Miracle Bridge](./miracle_bridge_dev_guide) | 核心前置模组，提供 Webview 容器与 JS-Java 桥接 | 📝 Draft |
 
+#### Miracle Bridge 文档系列
+
+- [开发指南](./miracle_bridge_dev_guide) - 项目定位、编码规范、依赖配置
+- [开发进度](./miracle_bridge_progress) - 实现状态、里程碑、更新日志
+- [组件架构](./miracle_bridge_components) - 核心组件实现逻辑与设计决策
+
 ### 即将推出
 
 - **Shittim OS** - 运行在游戏内的 React SPA 开发指南

@@ -35,8 +35,16 @@ export default defineConfig({
         {
           text: '开发文档',
           items: [
-            { text: '概览', link: '/dev/' },
-            { text: 'Miracle Bridge', link: '/dev/miracle_bridge_dev_guide' }
+            { text: '概览', link: '/dev/' }
+          ]
+        },
+        {
+          text: 'Miracle Bridge',
+          collapsed: false,
+          items: [
+            { text: '开发指南', link: '/dev/miracle_bridge_dev_guide' },
+            { text: '开发进度', link: '/dev/miracle_bridge_progress' },
+            { text: '组件架构', link: '/dev/miracle_bridge_components' }
           ]
         }
       ]

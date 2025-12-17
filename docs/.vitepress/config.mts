@@ -46,6 +46,14 @@ export default defineConfig({
             { text: '开发进度', link: '/dev/miracle_bridge_progress' },
             { text: '组件架构', link: '/dev/miracle_bridge_components' }
           ]
+        },
+        {
+          text: 'Shittim OS',
+          collapsed: false,
+          items: [
+            { text: '开发指南', link: '/dev/shittim_os_dev_guide' },
+            { text: '功能规划', link: '/dev/shittim_os_roadmap' }
+          ]
         }
       ]
     },

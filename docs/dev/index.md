@@ -22,6 +22,17 @@ layout: doc
 - [开发进度](./miracle_bridge_progress) - 实现状态、里程碑、更新日志
 - [组件架构](./miracle_bridge_components) - 核心组件实现逻辑与设计决策
 
+### AI 核心
+
+| 模块 | 描述 | 状态 |
+| :--- | :--- | :--- |
+| [Anima](./anima_design) | 多人格 AI 核心引擎，为学生注入灵魂 | 📝 Draft |
+
+#### Anima 文档系列
+
+- [设计文档](./anima_design) - 架构概览、模块设计、开发路线
+- [集成指南](./anima_integration) - Anima ↔ Bridge ↔ 前端 数据流与 API 协议
+
 ### 前端应用
 
 | 项目 | 描述 | 状态 |
@@ -35,7 +46,6 @@ layout: doc
 
 ### 即将推出
 
-- **Entity AI Framework** - 学生 AI 行为系统开发指南
 - **Audio System** - 动态音频与 TTS 集成指南
 
 ## 🛠️ 开发环境

@@ -48,6 +48,14 @@ export default defineConfig({
           ]
         },
         {
+          text: 'Anima',
+          collapsed: false,
+          items: [
+            { text: '设计文档', link: '/dev/anima_design' },
+            { text: '集成指南', link: '/dev/anima_integration' }
+          ]
+        },
+        {
           text: 'Shittim OS',
           collapsed: false,
           items: [

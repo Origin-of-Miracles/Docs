@@ -13,7 +13,10 @@ This document outlines the performance optimizations implemented in this documen
 - Particularly beneficial for repositories with long history
 - For documentation sites, full history is typically not needed for builds
 
-**When to use full history**: Only if you need git history for features like "last updated" timestamps based on git commits. VitePress handles this efficiently without requiring full history.
+**Trade-off**: 
+- VitePress's `lastUpdated` feature will show the build/deployment date instead of the actual file modification date
+- **Mitigation**: The documentation already includes manual "最后更新" dates in markdown files (e.g., `> **最后更新**: 2025-12-18`), which are more reliable for documentation purposes
+- If accurate git-based timestamps are critical, change `fetch-depth: 1` back to `fetch-depth: 0` in `.github/workflows/deploy.yml`
 
 ### 2. Removed Redundant SSH Directory Creation
 **Change**: Removed `mkdir -p ~/.ssh` as it's already handled by the `webfactory/ssh-agent` action.
@@ -81,6 +84,19 @@ This document outlines the performance optimizations implemented in this documen
    - Image load: Potential 60-70% improvement if logo is optimized
 
 ## Best Practices
+
+### Git History and Last Updated Timestamps
+
+The current configuration uses `fetch-depth: 1` for performance. The documentation includes manual "最后更新" dates in markdown files which serve as the canonical update timestamps. This approach:
+
+1. **Faster CI/CD**: Shallow clones significantly reduce checkout time
+2. **Explicit Dates**: Manual dates in markdown are visible in the source and more maintainable
+3. **Git-based Footer**: VitePress footer shows last deployment date (not file modification date)
+
+**Alternative Approach**: If you prefer git-based timestamps over manual dates:
+- Change `fetch-depth: 1` to `fetch-depth: 0` in `.github/workflows/deploy.yml`
+- Remove manual "最后更新" dates from markdown files
+- Trade-off: Slower CI/CD for automatic timestamps
 
 ### For Future Development
 

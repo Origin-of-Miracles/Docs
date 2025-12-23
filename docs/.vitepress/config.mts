@@ -17,6 +17,7 @@ export default defineConfig({
       { text: '社区宣言', link: '/manifesto' },
       { text: 'EULA', link: '/eula' },
       { text: '开发文档', link: '/dev/' },
+      { text: '贡献资源', link: '/contribute/' },
       { text: 'GitHub', link: 'https://github.com/Origin-of-Miracles' }
     ],
 
@@ -61,6 +62,23 @@ export default defineConfig({
           items: [
             { text: '开发指南', link: '/dev/shittim_os_dev_guide' },
             { text: '功能规划', link: '/dev/shittim_os_roadmap' }
+          ]
+        }
+      ],
+      '/contribute/': [
+        {
+          text: '贡献资源',
+          items: [
+            { text: '概览', link: '/contribute/' },
+            { text: '创作者守则', link: '/contribute/code-of-conduct' }
+          ]
+        },
+        {
+          text: '资源类型',
+          collapsed: false,
+          items: [
+            { text: '人格配置', link: '/contribute/personas' },
+            { text: '模型制作', link: '/contribute/models' }
           ]
         }
       ]
